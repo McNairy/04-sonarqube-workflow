@@ -2,7 +2,7 @@
 
 param(
   [Parameter(Position=0, Mandatory=$False)]
-  [ValidateSet("new-project")]
+  [ValidateSet("new-project", "remove-project")]
   [string]$Command,
 
   [Parameter(Position=1, ValueFromRemainingArguments=$true)]
@@ -10,6 +10,7 @@ param(
 )
 
 Import-Module ProjectNew
+Import-Module ProjectRemove
 
 switch( $Command ) {
   "new-project" {
@@ -23,5 +24,8 @@ switch( $Command ) {
         -Name $Options[1] `
         -Visibility $Options[2]
     }
+  }
+  "remove-project" {
+    Remove-Project -Project $Options[0]
   }
 }
