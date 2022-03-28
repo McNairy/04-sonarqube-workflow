@@ -1,15 +1,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: sonarqube-
+  generateName: sonar-scanner-
   labels:
     workflows.argoproj.io/archive-strategy: "false"
 spec:
-  entrypoint: sonarqube
+  entrypoint: sonar-scanner
   templates:
-    - name: sonarqube
+    - name: sonar-scanner
       script:
-        image: bitnami/sonarqube:9.3.0
+        image: sonarsource/sonar-scanner-cli:4.7.0
         command: [bash]
         source: |
-          echo 'KILROY'
+          eval `ssh-agent -s`
+          echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+          ssh-add .ssh/cert
+          cd /tmp
+          git clone <git url>
+          # Start Sonar Scanner
+          sonarscanner begin /k:"example-1" \
+          /n:"example1"  \
+          /d:sonar.login="example1" \
+          /d:sonar.host.url="localhost:9000"   
+          # End Sonar Scanner
+          sonarscanner end /d:sonar.login="example1" ; exit 0
