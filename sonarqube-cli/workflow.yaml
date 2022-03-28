@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: sonarqube-
+  labels:
+    workflows.argoproj.io/archive-strategy: "false"
+spec:
+  entrypoint: sonarqube
+  templates:
+    - name: sonarqube
+      script:
+        image: bitnami/sonarqube:9.3.0
+        command: [bash]
+        source: |
+          echo 'KILROY'
